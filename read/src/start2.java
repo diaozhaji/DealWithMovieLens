@@ -10,9 +10,9 @@ public class start2 {
 	
 	
 	public static ArrayList<UserScore> loadUserScore(){
-		//String path = "E://Python/allbut/u1.base";
-		String path = "E://Python/test.txt";
-		ReadFile rd = new ReadFile();
+		String path = "/Users/jiyuan/Documents/xiuya/allbut/u1.base";
+		//String path = "E://Python/test.txt";
+		MyUtils rd = new MyUtils();
 		String[] s = rd.writeToDat(path);
 		ArrayList<UserScore> mus = new ArrayList<UserScore>();
 		
