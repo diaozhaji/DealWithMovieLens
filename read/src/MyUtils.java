@@ -37,8 +37,10 @@ public class MyUtils {
 		  
 	}
 	
-
-	public static void appendMethodB(String fileName, String content) {
+	/*
+	 * 将String输出至文件，写入方式为添加
+	 * */
+	public static void addLineToFile(String fileName, String content) {
 		try {
 			// 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
 			FileWriter writer = new FileWriter(fileName, true);
@@ -49,8 +51,43 @@ public class MyUtils {
 		}
 	}
 	
+	/*
+	 * 求一个int型数字的位数
+	 * */
+	public static int sizeOfInt(int a){  
+		int count = (int) (Math.log10(a) + 1);  
+		return count;  
+	} 
 	
+	/*
+	 * 格式化输出，讲一个int数组转成字符串
+	 * */
+	public static String arrayToLine(int[] a) {
+		String str = "";
 
+		for (int i = 0; i < a.length; i++) {
+			
+			String block = "";
+			for (int j = 0; j < 6 - sizeOfInt(a[i]); j++)
+				block += " ";
+			
+			str += a[i] + block;
+		}
+		return str;
+	}
+	
+	/*
+	 * 格式化输出，打印一个int数组
+	 * 
+	 * */
+	public static void printArray(int []a){
+		String str = "";
+		for(int i=0;i<a.length;i++){
+			str += a[i]+" ";
+		}
+		System.out.println("这个数组是 "+str);
+	}
+	
 	/*
 	 * 打印一个一维数组，并把double保留3位小数
 	 * 
@@ -81,7 +118,7 @@ public class MyUtils {
 	}
 	
 	/*
-	 * 打印一个二维数组，数组中值位double类型
+	 * 打印一个二维数组，数组中值为double类型
 	 * 
 	 * */
 	public static void printMatrix(double[][] a){
@@ -120,6 +157,11 @@ public class MyUtils {
 		return str;
 	}
 	
+	/*
+	 * 打印原始用户评分
+	 * 
+	 * 留在这里备份，好像没有用到
+	 * */
 	public static void printOriUserScore(ArrayList<Film> mfa, ArrayList<UserScore> sus) {
 		// TODO Auto-generated method stub
 		System.out.println("printOriUserScore:");

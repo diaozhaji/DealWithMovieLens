@@ -17,7 +17,16 @@ public class start {
 		mus = loadAllUserScore();
 		
 		//getUserInfo(108,mfa,mus);
-		replaceUserScoreById(108,mfa,mus);
+		
+		//writeUserScoreMatrixToFile(mfa,mus);
+		
+		String path = "E://xiuya/用户评分矩阵.txt";
+		String str = "";
+		for(int id=1;id<944;id++){
+			int []a = getReUserScoreById(id,mfa,mus);			
+			str = MyUtils.arrayToLine(a);			
+			MyUtils.addLineToFile(path,str+"\n");
+		}
 		
 		/*
 		//留作矩阵填充
@@ -80,6 +89,47 @@ public class start {
 		
 		
 	}
+	
+	private static int[] getReUserScoreById(int id, ArrayList<Film> mfa,
+			ArrayList<UserScore> mus) {
+		// TODO Auto-generated method stub
+		System.out.println("用户"+id+"：");
+		double []a = replaceUserScoreById(id,mfa,mus);
+		int []b = roundingUserScore(a);
+		int []c = new int[6];
+		for(int i=0;i<b.length;i++){	
+			//System.out.println(b[i]);
+			if(b[i]>5){
+				b[i]=5;
+			}
+			c[b[i]]++;			
+		}
+		//MyUtils.printArray(c);
+		return c;
+		
+		
+	}
+
+
+
+	private static void writeUserScoreMatrixToFile(
+			ArrayList<Film> mfa,ArrayList<UserScore> mus) {
+		// TODO Auto-generated method stub
+			
+	}
+
+	/*
+	 * 对用户-电影相似度四舍五入
+	 * 1维
+	 * 
+	 * */
+	public static int[] roundingUserScore(double a[]) {
+		int []b = new int[a.length];
+		for (int i = 0; i < a.length; i++) {
+			b[i] = (int) Math.floor(a[i]);
+		}
+		return b;
+	}
 
 	private static double[] replaceUserScoreById(int id, ArrayList<Film> mfa,
 			ArrayList<UserScore> mus) {
@@ -89,15 +139,14 @@ public class start {
 		int cnt = 0;
 		for (int i = 0; i < sus.size(); i++) {
 			int a = sus.get(i).getFilmId();
-			double b = score[a];
-			score[a] = sus.get(i).getScore();
-			if ((score[a] > (b - 1)) && (score[a] < (b + 1)))
+			double b = score[a-1];
+			score[a-1] = sus.get(i).getScore();
+			if ((score[a-1] > (b - 1)) && (score[a-1] < (b + 1)))
 				cnt++;
-			System.out.println("将第" + a + "个电影的评分" + b + "换成了用户真实评价的分数"
-					+ score[a]);
+			//System.out.println("将第"+a+"个电影的评分"+b+"换成了用户真实评价的分数"+score[a]);
 		}
 		System.out.println("该用户共评价" + sus.size() + "个电影");
-		System.out.println("误差在+－1分之间的个数为:" + cnt);
+		System.out.println("误差在+-1分之间的个数为:" + cnt);
 
 		return score;
 	}
@@ -137,14 +186,14 @@ public class start {
 		//String filePath = "/Users/jiyuan/Documents/xiuya/全部用户相似度矩阵四舍五入.txt";
 		String filePath = "/Users/jiyuan/Documents/xiuya/test.txt";
 		for (int i = 0; i < 10; i++)
-			MyUtils.appendMethodB(filePath, i + "     ");
+			MyUtils.addLineToFile(filePath, i + "     ");
 		for (int i = 10; i < 100; i++)
-			MyUtils.appendMethodB(filePath, i + "    ");
+			MyUtils.addLineToFile(filePath, i + "    ");
 		for (int i = 100; i < 1000; i++)
-			MyUtils.appendMethodB(filePath, i + "   ");
+			MyUtils.addLineToFile(filePath, i + "   ");
 		for (int i = 1000; i < 1682; i++)
-			MyUtils.appendMethodB(filePath, i + "  ");
-		MyUtils.appendMethodB(filePath, "\n");
+			MyUtils.addLineToFile(filePath, i + "  ");
+		MyUtils.addLineToFile(filePath, "\n");
 		
 		for (int i = 1; i < 944; i++) {
 			double userFilmSim[] = new double[1682];
@@ -158,7 +207,7 @@ public class start {
 			}
 			MyUtils.printArray(userFilmSim);
 			String content = MyUtils.matrixToLineDouble(userFilmSim);
-			MyUtils.appendMethodB(filePath, content + "\n");
+			MyUtils.addLineToFile(filePath, content + "\n");
 			// MyUtils.appendMethodB("/Users/jiyuan/Documents/xiuya/全部用户相似度矩阵四舍五入.txt",content+"\n");
 
 			System.out.println("第" + i + "个用户相似度写入成功");
@@ -180,7 +229,7 @@ public class start {
 			// 四舍五入
 			// userFilmSim[j] = (int)Math.floor(userFilmSim[j]);
 		}
-		MyUtils.printArray(userFilmSim);
+		//MyUtils.printArray(userFilmSim);
 		
 		return userFilmSim;
 		
@@ -217,7 +266,7 @@ public class start {
 			}
 			// System.out.println(log);
 			log += "\n";
-			MyUtils.appendMethodB("/Users/jiyuan/Documents/xiuya/所有用户向量.txt",log);
+			MyUtils.addLineToFile("/Users/jiyuan/Documents/xiuya/所有用户向量.txt",log);
 
 		}
 	}
@@ -313,7 +362,8 @@ public class start {
 	 * */
 	
 	public static ArrayList<Film> getFilmMatrix(){
-		String path = "/Users/jiyuan/Documents/xiuya/allbut/u.item";
+		String path = "E://xiuya/allbut/u.item";
+		//String path = "/Users/jiyuan/Documents/xiuya/allbut/u.item";
 		String[] s = MyUtils.writeToDat(path);
 		ArrayList<Film> mFilmArray = new ArrayList<Film>();
 		for(int index=0;index<s.length;index++){
@@ -362,7 +412,9 @@ public class start {
 	 * */
 	
 	public static ArrayList<UserScore> loadAllUserScore(){
-		String path = "/Users/jiyuan/Documents/xiuya/allbut/u1.base";
+		String path = "E://xiuya/allbut/u1.base";
+		
+		//String path = "/Users/jiyuan/Documents/xiuya/allbut/u1.base";
 		//String path = "/Users/jiyuan/Documents/xiuya/test.txt";
 		String[] s = MyUtils.writeToDat(path);
 		ArrayList<UserScore> mus = new ArrayList<UserScore>();
